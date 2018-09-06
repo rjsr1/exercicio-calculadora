@@ -2,12 +2,94 @@ package br.ufpe.cin.if710.calculadora
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Layout
+import android.view.View
+import android.view.View.OnClickListener
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 
-class MainActivity : Activity() {
+class MainActivity : Activity(), OnClickListener{
+
+
+
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putString("resultado",this.displayResult.text.toString())
+    }
+
+    override fun onClick(v: View?) {
+        try{
+            when(v?.id){
+
+
+                R.id.btn_Equal->{
+                    var resultado=eval(Expressao)
+                    displayResult.setText(resultado.toString())
+                    Expressao="";
+                }
+                R.id.btn_Clear->{
+                    displayResult.setText("");
+                    Expressao="";
+                }
+                else->{
+                    var button=v as Button
+                    Expressao=Expressao+button.text
+                    displayResult.setText(Expressao)
+                }
+            }
+        }catch (e:Exception){
+           Toast.makeText(this,e.message,Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+    }
+
+    var Expressao:String=""
+    val Botoes:ArrayList<Button> = arrayListOf();
+    lateinit var displayResult:EditText;
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        displayResult= findViewById<EditText>(R.id.text_calc)
+        displayResult.setText(savedInstanceState?.getString("resultado"))
+
+        Expressao = displayResult.text.toString();
+
+        Botoes.add(findViewById(R.id.btn_0));
+        Botoes.add(findViewById(R.id.btn_1));
+        Botoes.add(findViewById(R.id.btn_2));
+        Botoes.add(findViewById(R.id.btn_3));
+        Botoes.add(findViewById(R.id.btn_4));
+        Botoes.add(findViewById(R.id.btn_5));
+        Botoes.add(findViewById(R.id.btn_6));
+        Botoes.add(findViewById(R.id.btn_7));
+        Botoes.add(findViewById(R.id.btn_8));
+        Botoes.add(findViewById(R.id.btn_9));
+        Botoes.add(findViewById(R.id.btn_Divide));
+        Botoes.add(findViewById(R.id.btn_Multiply));
+        Botoes.add(findViewById(R.id.btn_Subtract));
+        Botoes.add(findViewById(R.id.btn_Add));
+        Botoes.add(findViewById(R.id.btn_Equal));
+        Botoes.add(findViewById(R.id.btn_Dot));
+        Botoes.add(findViewById(R.id.btn_Power));
+        Botoes.add(findViewById(R.id.btn_Clear));
+        Botoes.add(findViewById(R.id.btn_LParen));
+        Botoes.add(findViewById(R.id.btn_RParen));
+
+        Botoes.forEach{
+            it.setOnClickListener(this);
+        }
+
+
+
     }
 
     //Como usar a função:
